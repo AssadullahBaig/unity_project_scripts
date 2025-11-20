@@ -4,6 +4,7 @@ public class playerMovement : MonoBehaviour
 {
 
 
+
     public Rigidbody2D rb; 
     public float jumpHeight = 10f;
     public float movespeed = 5f;
@@ -14,11 +15,13 @@ public class playerMovement : MonoBehaviour
     private float movement;
     private bool isGrounded;
     private bool facingRight;
+    private Animator animator;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         isGrounded = true;
         facingRight = true;
+        animator = this.gameObject.GetComponent<Animator>();
 
     }
 
@@ -37,12 +40,25 @@ public class playerMovement : MonoBehaviour
             isGrounded = true;
         }
         Flip();
+        PlayRunAnimation();
 
     }
     private void FixedUpdate()
     {
         transform.position += new Vector3(movement * movespeed, 0f, 0f) * Time.fixedDeltaTime;
     }
+
+    void PlayRunAnimation()
+    {
+        if (Mathf.Abs(movement) > 0f)
+        {
+            animator.SetFloat("Run", 1f);
+        }
+        else if(movement < 0.1f)
+        {
+            animator.SetFloat("Run", 0f);
+        }
+    }  
 
     void Flip()
     {
